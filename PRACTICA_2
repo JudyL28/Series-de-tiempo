@@ -1,0 +1,16 @@
+#################################################################################
+#####                            PRACTICA 2                              ########
+#################################################################################
+
+### INTRODUCCION A SERIES DE TIEMPO
+
+data("AirPassengers")
+class(AirPassengers)     #class( que clase de datos son estos?)
+                         #ts (es una serie de tiempo)
+start(AirPassengers)     # en que año empieza mi serie?
+end(AirPassengers)       # en que año acaba mi serie?
+frequency(AirPassengers) # me lanza el numero, mensual
+
+summary(AirPassengers)
+plot(AirPassengers)      # Tiene una tendencia a la alta y tambien tiene estacionalidad
+                         # NOTA: La estacionalidad se puede quitar.
