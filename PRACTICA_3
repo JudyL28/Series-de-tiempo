@@ -1,0 +1,35 @@
+#################################################################################
+#####                            PRACTICA 3                              ########
+#################################################################################
+
+### INTRODUCCION A SERIES DE TIEMPO
+
+# 1. En este ejmplo vamos a proponer la poblacion en el que el valor minimo seran 100
+# y 120 maximo, que sean 15 datos.
+pob<- sample(100:120, 15, replace=F) # Esta es solo una secuencia de numeros
+
+# 2. Por lo tanto le tenemos que indicar a R que es una serie de tiempo
+pobts<-ts(pob, frequency = 1, start=(2000))
+
+# 3. Graficar
+plot(pobts)
+
+# Importar .csv
+infor<-ts(read.csv(("C://Users//Sala-D19//Downloads//enoe2017.csv"),header = T), frequency = 4, start = 2005)
+infor
+
+# Para manejar 4 series al mismo tiempo
+se4ries<-ts(read.csv(("C://Users//Sala-D19//Downloads//4series.csv"),header = T), frequency = 4, start = 2005)
+se4ries
+plot(se4ries)
+
+# otra manera:
+series4<-read.csv(("C://Users//Sala-D19//Downloads//4series.csv"),header = T)
+desoc<-ts(series4[,1], frequency = 4, start=(2005))
+ocup<-ts(series4[,2], frequency = 4, start=(2005))
+asal<-ts(series4[,3], frequency = 4, start=(2005))
+condcrit<-ts(series4[,4], frequency = 4, start=(2005))
+desoc
+ocup
+asal
+condcrit
