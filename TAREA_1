@@ -1,0 +1,13 @@
+#################################################################################
+#####                             TAREA 1                                ########
+#################################################################################
+
+temporal <- tempfile()
+download.file ("http://www3.inegi.org.mx/Sistemas/infoenoe/Default_15mas.aspx?s=est&c=27736/IndicadoresENOE_2017-02-08.xls",temporal)
+files = unzip(temporal, list=TRUE)$Name
+unzip(temporal, files=files[grepl("dbf",files)])
+install.packages("foreign")
+require (foreign)
+enoe<-data.frame(read.dbf("IndicadoresENOE_2017-02-08.xls"))
+
+# No pude encontrar la liga de donde se descarga!
