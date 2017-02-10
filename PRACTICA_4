@@ -1,0 +1,54 @@
+#################################################################################
+#####                            PRACTICA 4                              ########
+#################################################################################
+
+# Ejercicio: Generar 4 objetos con datos aleatorios y que tengan 60 datos:
+# Objeto 1: de no. de profesionista (mil) rango de 5 a 8
+prof<-sample(5:8,60,replace=TRUE)
+prof
+
+# Objeto 2: Crec. del PIB rango de 0 a 5
+crepib<-sample(0:5,60,replace = TRUE)
+
+# Objeto 3: Porcentaje de ocupados rango de 40 a 60
+ocup<-sample(40:60,60,replace = TRUE)
+
+# Objeto 4: porcentaje de desocupados rango de 3 a 8
+desoc<-sample(3:8,60,replace = TRUE)
+
+# Ahora se generara una base de datos con estos 4 objetos
+pceu<-data.frame(prof,crepib,ocup,desoc)
+
+# Conociendo mi base de datos:
+pceu[1:12,] #para conocer mis primeros 12 datos
+pceu[49:60,] #para conocer mis ultimos datos
+
+# Convertir los objetos en series de tiempo, desde el data.frame
+# comenzando en 2010 y son datos mensuales
+
+sprof<-ts(prof,frequency = 12,start = 2010)
+spib<-ts(crepib,frequency = 12,start = 2010)
+sdesoc<-ts(desoc,frequency = 12,start = 2010)
+socup<-ts(ocup,frequency = 12,start = 2010)
+end(sprof)
+
+# Graficar profesionistas y ocupados en la misma imagen
+plot(cbind(sprof,ocup)) #cbind sirve para combinar graficas, vectores o matrices
+pibydesoc<-plot(cbind(spib,desoc))
+todas<-plot(cbind(sprof,socup,sdesoc,spib))
+plot.ts(pceu[,c(1,3)])
+
+# Para declarar una serie de tiempo multiple:
+pceu<-ts.intersect(prof,crepib,ocup,desoc)
+
+
+### Ejercicio con serie de datos del PIB anual en Mexico
+pibmex<-read.csv(("C://Users//Sala-D16//Documents//pib_csv1.csv"),header = T)
+pibmex
+st1<-ts(pibmex[21:31,],frequency = 1,start = 1980)
+st2<-ts(pibmex[32:41,],frequency = 1,start = 1991)
+st3<-ts(pibmex[42:51,],frequency = 1,start = 2001)
+st4<-ts(pibmex[52:56,],frequency = 1,start = 2011)
+st4
+st2y3<-plot(cbind(st2,st3))
+st1y4<-plot(cbind(st1,st4))
