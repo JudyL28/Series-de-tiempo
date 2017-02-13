@@ -1,0 +1,45 @@
+#################################################################################
+#####                            PRACTICA 5                              ########
+#################################################################################
+
+pobts<-sample(5:8,120,replace=TRUE)
+asets<-sample(0:5,120,replace = TRUE)
+infor<-sample(40:60,120,replace = TRUE)
+desoc<-sample(3:8,120,replace = TRUE)
+
+pobts<-ts(pobts,frequency = 12,start = 2002)
+asets<-ts(asets,frequency = 12,start = 2002)
+infor<-ts(infor,frequency = 12,start = 2002)
+desoc<-ts(desoc,frequency = 12,start = 2002)
+
+seriemult<-ts.intersect(desoc,pobts,asets,infor)
+plot(seriemult, main="Serie de Tiempo Multiple",xlab="Años",ylab="Numero de Personas",col="blue")
+
+# Para dividir mi serie de tiempo
+seriemult02.07<-window(seriemult,start=c(2002,1),end=c(2007,1))
+seriemult07.12<-window(seriemult,start=c(2007,1),end=c(2011,12))
+seriemult02.07
+plot(seriemult02.07, main="Serie de Tiempo Multiple",xlab="Años",ylab="Numero de Personas",col="red")
+plot(seriemult07.12, main="Serie de Tiempo Multiple",xlab="Años",ylab="Numero de Personas",col="brown")
+
+## EJERCICIO:
+# Obtener 4 series de tiempo con 30 datos
+crit_ocup<-read.csv(("C://Users//SALA-D17//Documents//criticosocup_csv.csv"),header = T)
+crit_ocup
+ing_minimo<-ts(crit_ocup[,1],frequency = 4,start=2005)
+dur_48hr<-ts(crit_ocup[,2],frequency = 4,start=2005)
+sald_s_acc<-ts(crit_ocup[,3],frequency = 4,start=2005)
+s_presta<-ts(crit_ocup[,4],frequency = 4,start=2005)
+
+plot.ts(cbind(ing_minimo,dur_48hr,sald_s_acc,s_presta),main="Serie de Tiempo Multiple:Ocupacion Critica",xlab="Años",ylab="Tasa",col="blue")
+crit_ocup_s<-ts.intersect(ing_minimo,dur_48hr,sald_s_acc,s_presta)
+plot(crit_ocup_s, main="Serie de Tiempo Multiple:Ocupacion Critica",xlab="Años",ylab="Numero de Personas",col="brown")
+
+c_ocup_05.06<-window(crit_ocup_s,start=c(2005,1),end=c(2006,4))
+c_ocup_07.08<-window(crit_ocup_s,start=c(2007,1),end=c(2008,4))
+c_ocup_09.10<-window(crit_ocup_s,start=c(2009,1),end=c(2010,4))
+
+plot(c_ocup_05.06, main="Serie de Tiempo Multiple:Ocupacion Critica 2005.2006",xlab="Años",ylab="Numero de Personas",col="brown")
+plot(c_ocup_07.08, main="Serie de Tiempo Multiple:Ocupacion Critica 2007.2008",xlab="Años",ylab="Numero de Personas",col="red")
+plot(c_ocup_09.10, main="Serie de Tiempo Multiple:Ocupacion Critica 2009.2010",xlab="Años",ylab="Numero de Personas",col="pink")
+
