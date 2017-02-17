@@ -1,0 +1,46 @@
+#################################################################################
+#####                            PRACTICA 6                              ########
+#################################################################################
+
+## Para descomponer una serie de tiempo se utiliza decompose()
+desoc<-sample(3:8,44,replace = T)
+tdesoc<-ts(desoc,frequency = 4,start = 2005)
+plot(decompose(tdesoc))
+# donde trend es tendencia y seasonal estacionalidad
+plot(tdesoc)
+
+tiie2015<-read.csv("C://Users//SalaD-9//Downloads//TIIE2015.csv")
+tiie2015<-ts(tiie2015,frequency = 54,start = 2015)
+plot(decompose(tiie2015))
+
+pibmex<-read.csv("C://Users//SalaD-9//Documents//PIB_mex.csv")
+pibmex<-ts(pibmex,frequency = 6,start = 2007)
+plot(decompose(pibmex))
+
+# La tendencia suaviza nuestra grafica. La proyeccion es de acuerdo a la tendencia
+# La aleatoridad es lo que no nos puede explicar el modelo, que es el error
+depibmex<-decompose(pibmex)
+names(depibmex)
+depibmex$trend
+
+### EJERCICIO:
+## Descomponer una ST graficamente y llamar los componentes del la ST
+## Consumo de bienes y servicios de mexico, [9:43,11]
+conbys<-read.csv("C://Users//SalaD-9//Documents//byscsv.csv//[9:43,11]",header = F)
+conbysbase<-conbys[9:43,11]
+conbysbase<-ts(conbysbase,frequency = 12,start = 2014)
+bysdec<-decompose(conbysbase)
+plot(bysdec)
+names(bysdec)
+bysdec$seasonal
+bysdec$trend
+bysdec$random
+
+## Observaciones
+# Se logra observar en la grafica que el consumo de bienes y servicios en el añoo 2014 y principios
+# del 2015 fue menor que en los años posterioeres, al igual que hubo una caida al final del año 2015,
+# seguida de un importante incremento qu ellego a su maximo a finales del 2015 y ha tenido una caida
+# esde ese año.
+# Al igual se logra observar que hay una estacionalidad importante cada año, donde en el principio
+# de cada año se obtiene un incremento de este indicador, llegando a su maximo a mediados del año,
+# y decayendo al final del mismo.
