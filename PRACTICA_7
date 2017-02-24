@@ -1,0 +1,36 @@
+#################################################################################
+#####                            PRACTICA 7                              ########
+#################################################################################
+
+##### FOR
+u1<-(1:10)
+for(i in 1:10) { u1[i]+2
+                 print(u1[i])
+}
+
+#### WHILE
+s<-1
+while(s<6){s<-s*2; print(s)}
+
+s<-1
+while(s<5){s<-0+1; print(s)}
+
+s<-5
+while(s<5){s<-s+1;;if(s==4) break; print(s);}
+
+
+s<-2
+while(s<5){s<-s+1;;if(s==3)next; print(s)}
+
+desocupación<-read.csv(file.choose())
+
+#### TENDENCIA
+tsdes<-ts(desocupacion, frecuency= 4,start = 2005)
+detsdes<-decompose(tsdes)
+detsdes$trend
+detsdes$seasonal
+plot(tsdes,col="blue",main = "tasa de desocupacion trimestral",ylab = "Tasas",xlab = "Años")
+lines(detsdes$trend,col="red",ylab="Tendencia")
+
+#### ESTACIONALIDAD
+monthplot(detsdes$seasonal,main="IVEc",ylab = "Ivec trimestral")
