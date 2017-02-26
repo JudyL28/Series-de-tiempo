@@ -1,0 +1,21 @@
+#################################################################################
+#####                             TAREA 2                                ########
+#################################################################################
+
+# Se busca una serie de tiempo con tendencia alta y estacionalidad que incrementa.
+# Para esta tarea se ocupará los precios historicos de la acción de WalMex de manera
+# cuatrimestral del periodo 2003 a 2016.
+walmex<-read.csv(file.choose())
+walmex<-ts(walmex,frequency = 3,start = 2003)
+
+# Descomponer la serie de tiempo por modelo multiplicativo
+walmexd<-decompose(walmex,type = "multiplicative")
+plot(walmexd)
+
+# Obtener y graficar la tendencia
+walmexd$seasonal
+plot(walmexd$seasonal,main="Estacionalidad de las acciones de WalMEx")
+monthplot(walmexd$seasonal,main="Estacionalidad de WalMex",ylab = "Ivec trimestral")
+
+plot(walmex,col="blue",main = "Acciones de WalMex",ylab = "Accion",xlab = "Años")
+lines(walmexd$trend,col="red",ylab="Tendencia")
