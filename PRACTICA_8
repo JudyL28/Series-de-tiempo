@@ -1,0 +1,52 @@
+#################################################################################
+#####                            PRACTICA 8                              ########
+#################################################################################
+
+## Existe decompose() que es la descomposicion clasica en ST o
+## Descomposición por Loess; la cual esta basada en un algoritmo que al igual descompone
+## una ST en sus tres elementos, la diferencia es que obtiene valores de estacionariedad
+## no constantes.
+
+desocupacion
+class(desocupacion)
+des<-ts(desocupacion[1:48,1],frequency = 4,start = 2005)
+
+# Como en la vida real nada es cte. la descomposicion clasica no sirve del todo por
+# eso se utiliza esta nueva descomposición
+# Se utiliza cuando el modelo es aditivo. La tendencia es mas suavizada con este método.
+
+desco<-decompose(des)
+tend1<-desco$trend
+plot(tend1,col="blue",main = "Tendencia Desocupación",ylab = "Tasas",xlab = "Años")
+lines(tend2,col="red")
+
+## Para hacerlo con el método Loose se utiliza la funcion stl()
+
+desco2<-stl(des,s.window = "periodic",robust = T)
+names(desco2)
+desco2
+
+# Este método nos da una tendencia para todos los periodos, no se salta las ultimas 
+# y los primeros años
+
+tend2<-desco2$time.series[,2]
+esta2<-desco2$time.series[,1]
+
+#### EJERCICIO CON SERIE DE PIB
+pib<-read.csv(file.choose(),header = F)
+pibserie<-ts(pib[1:35,1],frequency = 4,start = 2007)
+pibserie
+pibdescom<-stl(pibserie,s.window = "periodic",robust = T)
+pibdescom
+pibdescom1<-decompose(pibserie)
+pibtend1<-pibdescom1$trend
+plot(pibtend1,col="green",main = "Tendencia del PIB")
+lines(pibdescom$time.series[,2],col="red")
+
+install.packages("fpp")
+require(fpp)
+ajus<-seasadj(desco2) # Sirve para ajustar estacionariedad
+
+## Se hace un pronostico con el método ingenuo
+inge1<-naive(ajus,h=4)
+plot(inge1)
