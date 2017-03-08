@@ -1,0 +1,15 @@
+#################################################################################
+#####                             TAREA 3                                ########
+#################################################################################
+
+pibmex<-read.csv(file.choose(),header = FALSE)
+pibmex<-ts(pibmex,frequency = 1,start = (1960))
+pibmex
+plot(pibmex,xlab="Años",ylab="PIB (%)",main="Comportamiento del PIB en México 1960-2015")
+pib80_99<-window(pibmex,start=1980,end=1999)
+pib80_99
+plot(pib80_99,xlab="Años",ylab="PIB (%)",main="Comportamiento del PIB en México 1980-1999")
+
+pibdec<-decompose(pib80_99,type = "multiplicative")
+## Se intento utilizar la funcion decompose para analizar los componentes de esta serie
+## pero no se pudo realizar puesto que esta funcion no trabaja con datos anuales.
