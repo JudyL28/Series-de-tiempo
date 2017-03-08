@@ -1,0 +1,26 @@
+#################################################################################
+#####                           PRACTICA 10                              ########
+#################################################################################
+
+## Modelo multiplicativo
+## Estos son apropiados cuando la magnitud de las fluctuaciones estacionales de la serie crece y
+## decrece proporcionalmetne con los crecimientos y decrecimientos de la tendencia, respect.
+
+## Se sigue utilizando la funcion decompose() con ayuda de "multiplicative"
+
+## Desestacionalizar una serie
+## Se hace para poder predecir nuestros datos con mayor presicion y sin contar con factores externos 
+## al comportamiento de nuestros datos. Hay dos maneras:
+
+## 1) A mano:
+sin_esta<-desot-dectsd$seasonal
+sin_esta
+
+## 2) Con ayuda de un paquete de R
+require(fpp)
+eeadj<-seasadj(dectsd)
+eeadj
+plot(eeadj)
+
+## Donde:   desot<- es mi serie de tiempo  
+##          dectsd<- decompose(desot)
