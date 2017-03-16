@@ -1,0 +1,32 @@
+#################################################################################
+#####                             TAREA 3                                ########
+#################################################################################
+
+# Se realiza un funcion que nos devuelva la covarianza y la correlacion de un conjunto
+# de datos.
+
+# Encontrar la correlacion entre el colesterol y el sodio de un conjunto de personas.
+
+colesterol<-c(20,15,25,15,10,15,15,15)
+sodio<-c(340,300,520,340,320,290,260,330)
+
+mi_funcion<-function (a,b){
+x<-(1:length(a))
+y<-(1:length(b))
+c<-length(a)
+m_a<-mean(a)
+m_b<-mean(b)
+  for (i in 1:c) { x[i]<-a[i]-m_a
+                   y[i]<-b[i]-m_b  
+                  }
+xy<-x*y
+suma<-sum(xy)
+cov<-suma/(c-1)
+corr<-cov/(sd(a)*sd(b))
+val<-c(cov,corr)
+return(val)
+}
+
+mi_funcion(colesterol,sodio)
+cov(colesterol,sodio)
+cor(colesterol,sodio)
