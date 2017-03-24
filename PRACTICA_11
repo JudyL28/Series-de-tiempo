@@ -1,0 +1,23 @@
+#################################################################################
+#####                           PRACTICA 11                              ########
+#################################################################################
+
+## Método de la deriva
+# Consiste en que el pronostico puede incrementar o reducirse sobre el tiempo.
+# Dependiendo del promedio de los cambios historicos de la ST
+# Función en R:
+require(forecast)
+rwf(des,h=4,drift=TRUE) #Donde: drift, es el argumento que nos indica que este método es a la deriva
+plot(rwf(des,h=4,drift=TRUE))
+
+desocmod1<-meanf(des,h=4)
+desocmod2<-naive(des,h=4)
+desocmod3<-snaive(des,h=4)
+desocmod4<-rwf(des,h=4)
+
+x11()
+plot(desocmod1,main="Pronóstico de Desocupacóon por Métodos Lineales")
+lines(desocmod2$mean,col=5)
+lines(desocmod3$mean,col=6)
+lines(desocmod4$mean,col=7)
+legend("topright",lty = 1,col=c(8,5,6,7),legend = c("Media","Ingenuo","Ingenuo Estacional","Deriva"))
