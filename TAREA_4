@@ -1,0 +1,69 @@
+#################################################################################
+#####                             TAREA 4                                ########
+#################################################################################
+
+pib<-read.csv(file.choose(),header = FALSE)
+pibc<-pib[,2]
+pib22<-pib[52:56,2]
+pibs<-ts(pib[,2],frequency = 1,start = 1960)
+
+pib_60_10<-window(pibs,start=c(1960,1),end=c(2010,1))
+pib_11_15<-window(pibs,start=c(2011,1),end=c(2015,1))
+install.packages("forecast")
+require(forecast)
+# MODELO 1: Media
+pib1<-meanf(pib_60_10,h=5)
+
+# MODELO 2: Ingenuo
+pib2<-naive(pib_60_10,h=5)
+
+# MODELO 3: Ingenuo Estacional
+pib3<-snaive(pib_60_10,h=5)
+
+# MODELO 4: Deriva
+pib4<-rwf(pib_60_10,h=5)
+
+x11()
+plot(pibs,main="Pronóstico del PIB en México con Métodos Lineales")
+lines(pib_11_15,col="red")
+lines(pib1$mean,col="blue",pch=10)
+lines(pib2$mean,col="green",pch=22)
+lines(pib3$mean,col="pink",pch=3)
+lines(pib4$mean,col="yellow",pch=4)
+
+# FUNCION
+mi_funcion<-function(serie,p){
+  k=length(serie)-p
+  s1<-serie[1:k,]
+  s2<-serie[(k+1):length(serie),]
+  ms1<-meanf(s1,h=p)
+  ms2<-naive(s1,h=p)
+  ms3<-snaive(s1,h=p)
+  ms4<-rwf(s1,h=p)
+  
+  rm1<-s2-ms1$mean
+  rm2<-s2-ms2$mean
+  rm3<-s2-ms3$mean
+  rm4<-s2-ms4$mean
+  
+  tr<-c(rm1,rm2,rm3,rm4)
+  return(tr)
+}
+mi_funcion(pibc,5)
+
+k=length(pibc)-5
+s1<-pibc[,1:51]
+s2<-serie[(k+1):length(serie),]
+ms1<-meanf(s1,h=p)
+ms2<-naive(s1,h=p)
+ms3<-snaive(s1,h=p)
+ms4<-rwf(s1,h=p)
+
+rm1<-s2-ms1$mean
+rm2<-s2-ms2$mean
+rm3<-s2-ms3$mean
+rm4<-s2-ms4$mean
+
+tr<-c(rm1,rm2,rm3,rm4)
+
+  
