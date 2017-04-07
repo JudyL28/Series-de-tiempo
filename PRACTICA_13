@@ -1,0 +1,52 @@
+#################################################################################
+#####                           PRACTICA 13                              ########
+#################################################################################
+
+## ANALISIS DE LO REAIDUOS EN LOS PRONÓSTICOS
+
+require(fpp)
+des<-ts(desocupación,frequency = 4,start = 2005)
+mod1<-ses(des,alpha=0.1,initial="simple",h=8)
+mod2<-ses(des,alpha=0.3,initial="simple",h=8)
+mod3<-ses(des,alpha=0.9,initial="simple",h=8)
+mod4<-ses(des,alpha=0.95,initial="simple",h=8)
+
+plot(des,main = "Residuos",type="o")
+lines(fitted(mod1),col="green",type="o")
+lines(fitted(mod2),col="brown",type="o")
+lines(fitted(mod3),col="red",type="o")
+lines(fitted(mod4),col="pink",type="o")
+
+## Calculo de los residuos manualmente
+r<-des-mod1$fitted
+r
+mean(abs(r)) #MAE
+sqrt(mean(r^2)) #RMSE
+
+## Funcion en R
+evalmod1<-accuracy(mod1)
+evalmod1
+
+r2<-des-mod2$fitted
+r2
+mean(abs(r2)) #MAE
+sqrt(mean(r2^2)) #RMSE
+evalmod2<-accuracy(mod2)
+evalmod2
+
+r3<-des-mod3$fitted
+r3
+mean(abs(r3)) #MAE
+sqrt(mean(r3^2)) #RMSE
+evalmod3<-accuracy(mod3)
+evalmod3
+
+r4<-des-mod4$fitted
+r4
+mean(abs(r4)) #MAE
+sqrt(mean(r4^2)) #RMSE
+evalmod4<-accuracy(mod4)
+evalmod4
+
+## El modelo 3 es el que mas conviene puesto que tiene el MAE  mas pequeño y graficamente 
+## es el más cercano a la serie original
