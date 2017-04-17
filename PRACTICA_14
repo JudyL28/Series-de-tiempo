@@ -1,0 +1,53 @@
+#################################################################################
+#####                           PRACTICA 14                              ########
+#################################################################################
+
+# ACCIONES DE NETFLIX
+netflix<-read.csv(file.choose())
+netflix<-netflix[,7]
+netflix
+
+serienet<-ts(netflix,frequency = 252,start = 2016)
+require(fpp)
+mod1<-ses(serienet,alpha=0.2,initial="simple",h=8)
+mod2<-ses(serienet,alpha=0.4,initial="simple",h=8)
+mod3<-ses(serienet,alpha=0.6,initial="simple",h=8)
+mod4<-ses(serienet,alpha=0.8,initial="simple",h=8)
+
+plot(serienet,main = "Residuos",type="o")
+lines(fitted(mod1),col="green",type="o")
+lines(fitted(mod2),col="brown",type="o")
+lines(fitted(mod3),col="red",type="o")
+lines(fitted(mod4),col="pink",type="o")
+
+# Se observa en la grafica que el modelo que mejor se ajusta es el Modelo 4, pues es el mas cercano a los
+# valores reales
+
+evalmod1<-accuracy(mod1)
+evalmod1
+evalmod2<-accuracy(mod2)
+evalmod3<-accuracy(mod3)
+evalmod4<-accuracy(mod4)
+
+# MAE
+mae<-c(evalmod1[,3],evalmod2[,3],evalmod3[,3],evalmod4[,3])
+mae
+
+# RMSE
+rmse<-c(evalmod1[,2],evalmod2[,2],evalmod3[,2],evalmod4[,2])
+rmse
+
+ajuste<-matrix(data=c(mae,rmse),ncol = 2,dimnames=list(c("Alpha 0.2","Alpha 0.4","Alpha 0.6","Alpha 0.8"),c("MAE","RMSE")))
+ajuste
+which.min(ajuste)
+
+# Mediante esta tabla se logra observar que efectivamente el modelo 4 es el mas cercano a los valores
+# reales pues obtiene un MAE y RMSE mas pequeño a los demas modelos
+plot(serienet,main = "Residuos",type="o")
+
+# TENDENCIA: Vemos que la serie tiene al pirncipio del año una tendencia a la baja y a la mitad del año 
+# es a a la alta
+
+# ESTACIONARIEDAD: No tiene puesto que no tiene el mismo comportamiento todo el año
+
+# CICLOS: Se observa un primer cilo al inicio del año, que es la caida más baja del año.
