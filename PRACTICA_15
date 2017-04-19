@@ -1,0 +1,54 @@
+#################################################################################
+#####                           PRACTICA 15                              ########
+#################################################################################
+
+##### ANALISIS DE RESIDUALES
+# Propiedades:
+
+# 1. Los residuales no estan correlacionados
+# 2. Media = 0
+# 3. Varianza cte.
+# 4. Los residuales son normalmente distribuidos
+
+# Se obtienen los residuales de cada modelo para su analisis y comportamiento
+
+plot(serienet,main = "Residuos",type="l")
+lines(mod1$fitted,col="green",type="l")
+lines(mod2$fitted,col="brown",type="l")
+lines(mod3$fitted,col="red",type="l")
+lines(mod4$fitted,col="pink",type="l")
+
+res1<-residuals(mod1)
+res2<-residuals(mod2)
+res3<-residuals(mod3)
+res4<-residuals(mod4)
+
+plot(res1)
+plot(res2)      ### Se cumple con el supuesto de independencia
+plot(res3)      ### Ya que no hay un patron establecido
+plot(res4)      ### Los residuales no estan correlacionados
+
+hist(res1,nclass = "FD")      ### Con el histograma logramos observar
+hist(res2,nclass = "FD")      ### que se distribuyen normalmente
+hist(res3,nclass = "FD")      ### y con media 0 y varianza cte.
+hist(res4,nclass = "FD")
+
+### Autocorrelacion de residuales:
+# Ademas de las pruebas graficas anteriores, y el asutocorrelograma (acf()) existe la prueba de
+# ljung box que permite conocer la correlacion que existe entre residuales a traves de una prueba
+# de hipótesis. En R la función es: Box.test
+# Este prueba la Ho de que las autocorrelaciones de hasta un desfase k son = o, es decir, los valores 
+# de los datos son aleatorios e independietes hasta un cierto numero de desfases.
+# Si el LQB es mayor que un valor critico especificado, las autocorrelaciones para uno o mas 
+# desfases podrian ser estadisticamente sinificativas diferentes de 0, lo que indicaria que los 
+# valores no son aleatorios ni independientes
+
+Box.test(res1,lag=10,type = "Ljung-Box")
+Box.test(res2,lag=10,type = "Ljung-Box")
+Box.test(res3,lag=10,type = "Ljung-Box")
+Box.test(res4,lag=10,type = "Ljung-Box")
+
+## Etapas de una analisis de residuales
+# 1. Se elige el mdelo a travez de MAE y RMSE
+# 2. Realizar las pruebas para verificar propiedades
+# 3. Elegir el modelo como una opcion a considerar para realizar los pronosticos necesarios
