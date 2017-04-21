@@ -1,0 +1,55 @@
+#################################################################################
+#####                           PRACTICA 16                              ########
+#################################################################################
+
+## Realice 2 series de tiempo con tendencia a la alta y a la baja. Al menos 15 datos
+## Corte al 80% de los datos y grafique los 4 modelos con los datos restantes
+
+## Series
+netflix_baja<-netflix[1:30]
+plot(netflix_baja)
+netflix_baja<-ts(netflix_baja,start = 2016,frequency = 252)
+netflix_alta<-netflix[40:70]
+plot(netflix_alta)
+netflix_alta<-ts(netflix_alta,start = 2017,frequency = 252)
+
+## Corte de las series
+netbc1<-netflix_baja[1:20]
+netbc2<-netflix_baja[21:30]
+netac1<-netflix_alta[1:20]
+netac2<-netflix_alta[21:30]
+
+## Tendencia lineal de Holt
+require(fpp)
+m1_netb<-holt(netbc1,alpha=0.8,beta=0.2,initial="simple",h=10)
+m1_neta<-holt(netac1,alpha=0.8,beta=0.2,initial="simple",h=10)
+
+## Tendencia exponencial de Holt
+m2_netb<-holt(netbc1,alpha=0.8,beta=0.2,initial="simple",exponential=TRUE,h=10)
+m2_neta<-holt(netac1,alpha=0.8,beta=0.2,initial="simple",exponential=TRUE,h=10)
+
+## Tendencia aditiva amortiguado
+m3_netb<-holt(netbc1,alpha=0.8,beta=0.2,damped = TRUE,h=10)
+m3_neta<-holt(netac1,alpha=0.8,beta=0.2,damped = TRUE,h=10)
+
+## Tendencia multiplicativa amortiguada
+m4_netb<-holt(netbc1,alpha=0.8,beta=0.2,exponential=TRUE,damped = TRUE,h=10)
+m4_neta<-holt(netac1,alpha=0.8,beta=0.2,exponential=TRUE,damped = TRUE,h=10)
+
+## Grafica de Acciones de Netflix a la alta, con sus modelos
+x11()
+plot(c(netac1,netac2),main = "Grafica de Acciones de Netflix a la alta, con sus modelos",xlab = "Dias",ylab = "Precio",type = "l")
+lines(m1_neta$mean,col=8)
+lines(m2_neta$mean,col=5)
+lines(m3_neta$mean,col=6)
+lines(m4_neta$mean,col=7)
+legend("bottomright",lty = 1,col=c(8,5,6,7),legend = c("Lineal-Holt","Exponencial-Holt","Amortiguado Aditivo","Amortiguado Multiplicativo"))
+
+## Grafica de Acciones de Netflix a la baja, con sus modelos
+x11()
+plot(c(netbc1,netbc2),main = "Grafica de Acciones de Netflix a la baja, con sus modelos",xlab = "Dias",ylab = "Precio",type = "l")
+lines(m1_netb$mean,col=8)
+lines(m2_netb$mean,col=5)
+lines(m3_netb$mean,col=6)
+lines(m4_netb$mean,col=7)
+legend("topright",lty = 1,col=c(8,5,6,7),legend = c("Lineal-Holt","Exponencial-Holt","Amortiguado Aditivo","Amortiguado Multiplicativo"))
