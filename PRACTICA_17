@@ -1,0 +1,26 @@
+#################################################################################
+#####                           PRACTICA 17                              ########
+#################################################################################
+
+## Serie de tiempo estacional, aplique los dos pronosticos de los metodos H-W
+## y pronostico de tendencia exponencial y grafique
+
+mortalidad<-scan("http://anson.ucdavis.edu/~shumway/cmort.dat")
+mortalidad<-mortalidad[1:100]
+mort<-ts(mortalidad,start = 1900,frequency = 12)
+mortalidadc<-mortalidad[1:80]
+tmpg<-ts(mortalidadc,start = 1900,frequency = 12)
+plot(tmpg, main="Muertes diarias por enfermedades cardiovasculares")
+
+require(fpp)
+mod5<-hw(tmpg,seasonal="additive",h=20)
+mod6<-hw(tmpg,seasonal="multiplicative",h=20)
+mod7<-holt(tmpg,alpha=0.8,beta=0.2,initial="simple",exponential=TRUE,h=20)
+
+x11()
+plot(mort,main = "Muertes diarias por enfermedades cardiovasculares",xlab = "Años",ylab = "Muertes",type = "l")
+lines(mod5$mean,col="red")
+lines(mod6$mean,col="blue")
+lines(mod7$mean,col="purple")
+legend("topleft",lty = 1,col=c("red","blue","purple"),legend = c("H-W aditivo","H-W multiplicativo","Exponencial"))
+
