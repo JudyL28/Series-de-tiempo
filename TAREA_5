@@ -1,0 +1,52 @@
+#################################################################################
+#####                             TAREA 5                                ########
+#################################################################################
+
+dolar<-read.csv(file.choose())
+ica<-read.csv(file.choose())
+bimbo<-read.csv(file.choose())
+
+dolar<-ts(dolar[,2],start=2016,frequency = 252)
+dolar
+ica<-ts(ica[,2],start=2016,frequency = 261)
+ica
+bimbo<-ts(bimbo[,2],start=2016,frequency = 240)
+bimbo
+
+plot(dolar,main="Precios en los ultimos 6 meses del dolar")
+## Aqui utilizaria el Holt exponencial pues se observa un decremento exponencial
+
+plot(ica,main="Precios de las acciones diarias de ICA, 2016")
+## Aqui utilizaria Holt amortiguado pues es mas flexible con la tendencia
+
+plot(bimbo,main="Precios de las acciones diarias de BIMBO, 2016")
+## Aqui utilizaria Holt amortiguado pues es mas flexible con la tendencia
+
+# Dolar
+# M. simple deriva
+install.packages("fpp")
+require(fpp)
+dolar1<-dolar[1:80]
+modd1<-rwf(dolar1,h=27,drift=TRUE)
+# Holt-exponencial
+modd2<-holt(dolar1,alpha=0.8,beta=0.2,initial="simple",exponential=TRUE,h=27)
+# Holt- amortiguado multiplicativo
+modd3<-holt(dolar1,alpha=0.8,beta=0.2,exponential=TRUE,damped = TRUE,h=27)
+# Holt-Winter
+modd4<-hw(dolar1,seasonal="multiplicative",h=27) #Como no hay estacionalidad, no se puede
+
+x11()
+plot(dolar,main = "Grafica de precios del Dolar, con sus modelos",xlab = "Dias",ylab = "Precio",type = "l")
+lines(fitted(modd1),col=8)
+lines(modd2$mean,col=5)
+lines(modd3$mean,col=6)
+legend("topright",lty = 1,col=c(8,5,6),legend = c("Deriva","Exponencial-Holt","Amortiguado Multiplicativo"))
+
+accuracy(modd1)
+accuracy(modd2)     ## El mejor es el modelo 3 
+accuracy(modd3)
+
+plot(dolar,main = "Residuos",type="l")
+lines(modd1$fitted,col="green",type="l")
+lines(modd2$fitted,col="brown",type="l")
+lines(modd3$fitted,col="red",type="l")
