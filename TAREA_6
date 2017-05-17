@@ -1,0 +1,21 @@
+#################################################################################
+#####                             TAREA 6                                ########
+#################################################################################
+
+apple<-read.csv(file.choose(),header = TRUE)
+apple<-apple[,2]
+
+## Diferenciación en R
+difer<-diff(apple)
+difer
+
+## Diferenciación a mano
+diferenciacion<-function (a){
+  x<-(1:length(a))
+  c<-length(a)
+  for (i in 1:c) { x[i]<-a[i+1]-a[i]
+  }
+  return(x)
+}
+
+diferenciacion(apple)
