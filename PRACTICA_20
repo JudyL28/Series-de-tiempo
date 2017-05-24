@@ -1,0 +1,33 @@
+#################################################################################
+#####                           PRACTICA 20                              ########
+#################################################################################
+
+amx<-read.csv(file.choose())
+amx_s<-ts(amx[,2],frequency=252,start = 2016)
+
+## Modelos autoregresivos de orden 1 y 2 respectivamente:
+arima_amx<-arima(amx_s,order = c(1,0,0))
+arima_amx
+arima_amx2<-arima(amx_s,order = c(2,0,0))
+arima_amx2
+
+## Modelos promedios moviles de orden 1 y 2 respectivamente:
+arima_amx3<-arima(amx_s,order = c(0,0,1))
+arima_amx3
+arima_amx4<-arima(amx_s,order = c(0,0,2))
+arima_amx4
+
+## Modelo ARIMA
+arima_amx5<-arima(amx_s,order = c(2,1,2))
+arima_amx5
+
+## EJERCICIO: Aplique arima(0,3,2) a precios historicos de IXE
+ixe<-read.csv(file.choose())
+ixe_s<-ts(amx[,2],frequency=252,start = 2016)
+arima_ixe<-arima(amx_s,order = c(0,3,2))
+arima_ixe
+
+## Se observa que es un modelo con 3 grados de diferenciacion y de 2° orden de promedios moviles
+## Por lo tanto su ecuacion queda:
+
+## Yt = -0.8362(et-1)+0.9996(et-2)+et
