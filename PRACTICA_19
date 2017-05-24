@@ -1,0 +1,97 @@
+#################################################################################
+#####                           PRACTICA 19                              ########
+#################################################################################
+
+bimbo<-read.csv(file.choose())
+cemex<-read.csv(file.choose())
+
+bimbo_s<-ts(bimbo[,2],frequency=252,start = 2016)
+cemex_s<-ts(cemex[,2],frequency=252,start = 2016)
+
+# 1) Revisar si la serie es estacionaria
+## Prueba de raiz unitaria con adf.test() con p-values menor a 0.05
+require(fpp)
+adf.test(bimbo_s)
+
+## Ya que no es estacionaria, se realiza la diferenciacion
+dif_bimbo<-diff(bimbo_s)
+adf.test(dif_bimbo)
+
+## Se buscan 3 parametros para el modelo ARIMA, donde (p,q,r) y q son el no. de diferenciaciones
+## que se hacen
+## Nuestra serie en la primera diferenciacion se convierte estacionaria, por lo que q=1
+
+acf(dif_bimbo)
+## r es determinado por el no. de lineas fuera de las barras de limite en el correlograma
+## r, es el no. que se asica con los mod. de promedios moviles
+
+pacf(dif_bimbo)
+## El valor de p viene dado por el no. de lineas que sobrepasan el limite
+## p, es el no. que se asocia con modelos autoregresivos
+
+## Con estos resultados se propone un modelo ARIMA(1,1,1)
+mod_bimbo<-Arima(bimbo_s,order = c(1,1,1))
+mod_bimbo
+
+## El modelo que tenga menor AICc es el modelo que mejor ajusta a nuestros resultados (criterio de AIKAIKE)
+## Ahora se propone un modelo para ver si mejora o no el ajuste
+mod_bimbo1<-Arima(bimbo_s,order = c(2,1,2))
+mod_bimbo1
+mod_bimbo1<-Arima(bimbo_s,order = c(0,1,0))
+mod_bimbo1
+
+## El mejor modelo es el mod_bimbo.
+## Se hace la prueba de independencia entre los residuales
+bimbo_res<-residuals(mod_bimbo)
+bimbo_res1<-residuals(mod_bimbo1)
+Box.test(bimbo_res1,lag=12,type = "Ljung-Box")
+## Entre mas cercano a 1 sea el p-value, mas independencia tienen los residuales
+
+## Se aplica modelo para pronosticar:
+mod_bimbop<-forecast(mod_bimbo,h=20)
+plot(mod_bimbop,include = 18)
+
+## Auto-arima, propone los parametros que se buscaron en la primer parte
+auto.arima(bimbo_s)
+
+
+###########################################
+### EJERCICIO: Buscar modelo para cemex   #
+###########################################
+
+adf.test(cemex_s)     ## La serie no es estacionaria
+dif_cemex<-diff(cemex_s)
+adf.test(dif_cemex)   
+## Con una diferenciacion se estacionalizo la serie, por ello q=1
+
+acf(dif_cemex)
+## Con ayuda del correlograma se obtiene que r=2
+
+pacf(dif_cemex)
+## Con ayuda de esta grafica se obtiene que p=2
+
+## Por lo tanto se propone el modelo ARIMA(2,1,2)
+mod_cemex<-Arima(cemex_s,order = c(2,1,2))
+mod_cemex
+## Se obtiene un AICc de 114.66
+
+cemex_res<-residuals(mod_cemex)
+Box.test(cemex_res,lag=12,type = "Ljung-Box")
+## Se obtiene un p-value de 0.7, lo cual nos dice que los residuales son independientes entre si
+
+mod_cemexp<-forecast(mod_cemex,h=20)
+plot(mod_cemexp,include = 18)
+## Se observa en la grafica que el modelo ajusta muy bien los datos anteriores
+
+auto.arima(cemex_s)
+## R propone un modelo ARIMA(0,1,0)
+mod_cemex1<-Arima(cemex_s,order = c(0,1,0))
+mod_cemex1
+## Se obtiene un AICc de 113.08, que comparado con el modelo que yo propuse, este se apega mas a la serie
+
+cemex_res1<-residuals(mod_cemex1)
+Box.test(cemex_res1,lag=12,type = "Ljung-Box")
+## Aunque Se obtiene un p-value de 0.5, no tan bueno como el modelo anterior
+
+mod_cemexp1<-forecast(mod_cemex1,h=20)
+plot(mod_cemexp1,include = 18)
